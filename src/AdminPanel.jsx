@@ -1,0 +1,177 @@
+import React, { useState } from 'react';
+import { Save, LogOut, Edit3, X } from 'lucide-react';
+
+export default function AdminPanel({ editableContent, updateContent, toggleEditingMode, handleLogout, editingMode, onClose }) {
+  const [tempContent, setTempContent] = useState(editableContent);
+
+  const handleSave = () => {
+    // Simpan perubahan ke state utama
+    Object.keys(tempContent).forEach(key => {
+      if (key === 'name' || key === 'lpdpInfo' || key === 'universityInfo' || key === 'jobInfo') {
+        updateContent('main', null, key, tempContent[key]);
+      } else if (key === 'aboutCards' || key === 'contactCards') {
+        tempContent[key].forEach((card, index) => {
+          Object.keys(card).forEach(field => {
+            updateContent(key, index, field, card[field]);
+          });
+        });
+      }
+    });
+  };
+
+  const handleChange = (section, index, field, value) => {
+    setTempContent(prev => {
+      const updated = { ...prev };
+      if (section === 'main') {
+        updated[field] = value;
+      } else if (section === 'aboutCards' || section === 'contactCards') {
+        updated[section][index][field] = value;
+      }
+      return updated;
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-slate-900/95 backdrop-blur-lg z-50 overflow-y-auto">
+      <div className="min-h-screen py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold text-white">Admin Panel</h1>
+            <div className="flex gap-3">
+              <button
+                onClick={onClose}
+                className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+              >
+                <X size={18} />
+                Tutup
+              </button>
+              <button
+                onClick={toggleEditingMode}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                  editingMode 
+                    ? 'bg-emerald-500 hover:bg-emerald-600 text-white' 
+                    : 'bg-slate-700 hover:bg-slate-600 text-white'
+                }`}
+              >
+                <Edit3 size={18} />
+                {editingMode ? 'Matikan Edit Mode' : 'Aktifkan Edit Mode'}
+              </button>
+              <button
+                onClick={handleSave}
+                className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+              >
+                <Save size={18} />
+                Simpan
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+              >
+                <LogOut size={18} />
+                Logout
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/80 backdrop-blur rounded-2xl p-6 mb-8 border border-emerald-500/20">
+            <h2 className="text-xl font-bold text-white mb-4">Informasi Utama</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Nama</label>
+                <input
+                  type="text"
+                  value={tempContent.name}
+                  onChange={(e) => handleChange('main', null, 'name', e.target.value)}
+                  className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Info LPDP</label>
+                <input
+                  type="text"
+                  value={tempContent.lpdpInfo}
+                  onChange={(e) => handleChange('main', null, 'lpdpInfo', e.target.value)}
+                  className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Info Universitas</label>
+                <input
+                  type="text"
+                  value={tempContent.universityInfo}
+                  onChange={(e) => handleChange('main', null, 'universityInfo', e.target.value)}
+                  className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Info Pekerjaan</label>
+                <input
+                  type="text"
+                  value={tempContent.jobInfo}
+                  onChange={(e) => handleChange('main', null, 'jobInfo', e.target.value)}
+                  className="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/80 backdrop-blur rounded-2xl p-6 mb-8 border border-emerald-500/20">
+            <h2 className="text-xl font-bold text-white mb-4">Kartu Tentang Saya</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {tempContent.aboutCards.map((card, index) => (
+                <div key={index} className="bg-slate-700/50 rounded-xl p-4 border border-slate-600">
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-slate-300 mb-1">Judul</label>
+                    <input
+                      type="text"
+                      value={card.title}
+                      onChange={(e) => handleChange('aboutCards', index, 'title', e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-600/50 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-1">Deskripsi</label>
+                    <textarea
+                      value={card.desc}
+                      onChange={(e) => handleChange('aboutCards', index, 'desc', e.target.value)}
+                      rows={3}
+                      className="w-full px-3 py-2 bg-slate-600/50 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-slate-800/80 backdrop-blur rounded-2xl p-6 border border-emerald-500/20">
+            <h2 className="text-xl font-bold text-white mb-4">Kartu Kontak</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {tempContent.contactCards.map((card, index) => (
+                <div key={index} className="bg-slate-700/50 rounded-xl p-4 border border-slate-600">
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-slate-300 mb-1">Judul</label>
+                    <input
+                      type="text"
+                      value={card.title}
+                      onChange={(e) => handleChange('contactCards', index, 'title', e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-600/50 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-1">Detail</label>
+                    <input
+                      type="text"
+                      value={card.detail}
+                      onChange={(e) => handleChange('contactCards', index, 'detail', e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-600/50 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
