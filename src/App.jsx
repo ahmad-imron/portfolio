@@ -179,10 +179,10 @@ export default function Portfolio() {
         </>
       ) : (
         <>
-          {/* Tombol Pengaturan di Pojok Kanan Atas */}
+          {/* Tombol Pengaturan di Pojok Kanan Atas (hanya untuk desktop) */}
           <button
             onClick={handleSettingsClick}
-            className="fixed top-4 right-4 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 backdrop-blur-sm border border-emerald-500/30 rounded-full p-3 shadow-lg shadow-emerald-500/20 hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 transform hover:scale-105 z-40"
+            className="fixed top-4 right-4 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 backdrop-blur-sm border border-emerald-500/30 rounded-full p-3 shadow-lg shadow-emerald-500/20 hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 transform hover:scale-105 z-40 hidden md:block"
           >
             <Settings size={24} />
           </button>
@@ -235,6 +235,17 @@ export default function Portfolio() {
                   <button onClick={() => scrollToSection('home')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Beranda</button>
                   <button onClick={() => scrollToSection('about')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Tentang</button>
                   <button onClick={() => scrollToSection('contact')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Kontak</button>
+                  {/* Menu Pengaturan di dalam hamburger menu untuk mobile */}
+                  <button 
+                    onClick={() => {
+                      handleSettingsClick();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left text-emerald-400 hover:text-emerald-300 transition-colors py-2 hover:translate-x-2 transition-transform duration-300 flex items-center gap-2"
+                  >
+                    <Settings size={16} />
+                    Pengaturan
+                  </button>
                 </div>
               </div>
             )}

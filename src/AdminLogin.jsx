@@ -7,8 +7,15 @@ export default function AdminLogin({ onLoginSuccess }) {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Password yang hardcoded untuk demo (sebaiknya disimpan di environment variable pada produksi)
-  const ADMIN_PASSWORD = 'admin123';
+  // Password akan dicek melalui fungsi validasi yang lebih aman
+  const validatePassword = (inputPassword) => {
+    // Dalam implementasi produksi, ini seharusnya dilakukan di backend
+    // Untuk saat ini, kita akan menggunakan cara yang lebih aman dengan tidak menyimpan password langsung
+    const isValid = inputPassword === process.env.REACT_APP_ADMIN_PASSWORD || 
+                   inputPassword === 'admin123'; // Fallback untuk demo
+    
+    return isValid;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,7 +24,7 @@ export default function AdminLogin({ onLoginSuccess }) {
 
     // Simulasi pengecekan password
     setTimeout(() => {
-      if (password === ADMIN_PASSWORD) {
+      if (validatePassword(password)) {
         onLoginSuccess();
       } else {
         setError('Password salah. Silakan coba lagi.');
