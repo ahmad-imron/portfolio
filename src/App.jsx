@@ -168,7 +168,7 @@ export default function Portfolio() {
         
         <div className="relative z-10 text-center max-w-4xl mx-auto animate-fadeIn">
           <div className="mb-6 inline-block animate-scaleIn">
-            <div className="w-48 h-48 mx-auto rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-teal-500 flex items-center justify-center text-5xl font-bold shadow-2xl shadow-emerald-500/50 ring-4 ring-emerald-500/20 animate-pulse-slow relative group">
+            <div className="w-32 h-32 sm:w-48 sm:h-48 mx-auto rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-teal-500 flex items-center justify-center text-3xl sm:text-5xl font-bold shadow-2xl shadow-emerald-500/50 ring-4 ring-emerald-500/20 animate-pulse-slow relative group">
               <img 
                 src={profilePhoto} 
                 alt="Ahmad Imron" 
@@ -178,33 +178,33 @@ export default function Portfolio() {
             </div>
           </div>
           
-          <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-emerald-300 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-emerald-300 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp">
             Ahmad Imron
           </h1>
           
-          <div className="space-y-3 text-xs sm:text-sm md:text-base text-slate-300 mb-8 animate-slideUp" style={{ animationDelay: '0.2s' }}>
-            <div className="flex items-center justify-center gap-2 flex-wrap px-2 sm:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
-              <Award className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={16} />
-              <span>Penerima Beasiswa LPDP Angkatan 2 2024 PK-256</span>
+          <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm md:text-base lg:text-lg text-slate-300 mb-6 sm:mb-8 animate-slideUp" style={{ animationDelay: '0.2s' }}>
+            <div className="flex items-center justify-center gap-1 sm:gap-2 lg:gap-3 flex-wrap px-1 sm:px-2 md:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
+              <Award className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={14} />
+              <span className="leading-tight">Penerima Beasiswa LPDP Angkatan 2 2024 PK-256</span>
             </div>
-            <div className="flex items-center justify-center gap-2 flex-wrap px-2 sm:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
-              <GraduationCap className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={16} style={{ animationDelay: '0.1s' }} />
-              <span>Mahasiswa Magister Linguistik di Universitas Airlangga Surabaya</span>
+            <div className="flex items-center justify-center gap-1 sm:gap-2 lg:gap-3 flex-wrap px-1 sm:px-2 md:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
+              <GraduationCap className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={14} style={{ animationDelay: '0.1s' }} />
+              <span className="leading-tight">Mahasiswa Magister Linguistik di Universitas Airlangga Surabaya</span>
             </div>
-            <div className="flex items-center justify-center gap-2 flex-wrap px-2 sm:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
-              <BookOpen className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={16} style={{ animationDelay: '0.2s' }} />
-              <span>Guru SMA Islam | STAI DUBA</span>
+            <div className="flex items-center justify-center gap-1 sm:gap-2 lg:gap-3 flex-wrap px-1 sm:px-2 md:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
+              <BookOpen className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={14} style={{ animationDelay: '0.2s' }} />
+              <span className="leading-tight">Guru SMA Islam | STAI DUBA</span>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slideUp" style={{ animationDelay: '0.4s' }}>
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 lg:gap-6 justify-center items-center animate-slideUp" style={{ animationDelay: '0.4s' }}>
             <button 
               onClick={() => scrollToSection('contact')}
-              className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 hover:from-emerald-600 hover:via-green-600 hover:to-teal-600 text-slate-900 font-semibold px-6 py-3 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/50 relative overflow-hidden group w-full sm:w-auto flex justify-center text-sm sm:text-base"
+              className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 hover:from-emerald-600 hover:via-green-600 hover:to-teal-600 text-slate-900 font-semibold px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/50 relative overflow-hidden group w-full sm:w-auto flex justify-center text-sm sm:text-base md:text-lg"
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 md:gap-2.5">
                 Hubungi Saya
-                <Sparkles size={16} className="animate-spin-slow" />
+                <Sparkles size={14} className="animate-spin-slow" />
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-teal-500 via-green-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
@@ -212,11 +212,11 @@ export default function Portfolio() {
             <a 
               href={cvFile} 
               download="CV_Ahmad_Imron.docx"
-              className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 hover:from-slate-600 hover:via-slate-700 hover:to-slate-800 text-white font-semibold px-6 py-3 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl shadow-slate-500/30 hover:shadow-2xl hover:shadow-slate-500/50 relative overflow-hidden group border border-slate-600 w-full sm:w-auto flex justify-center text-sm sm:text-base"
+              className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 hover:from-slate-600 hover:via-slate-700 hover:to-slate-800 text-white font-semibold px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl shadow-slate-500/30 hover:shadow-2xl hover:shadow-slate-500/50 relative overflow-hidden group border border-slate-600 w-full sm:w-auto flex justify-center text-sm sm:text-base md:text-lg"
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 md:gap-2.5">
                 Download CV
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
               </span>
@@ -235,14 +235,14 @@ export default function Portfolio() {
 
         <div className="max-w-4xl mx-auto relative z-10 px-4">
           <h2 
-            className="text-2xl sm:text-3xl md:text-5xl font-bold mb-8 sm:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp"
+            className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp pt-8 sm:pt-10 md:pt-12"
             data-animate
             id="about-title"
           >
             Tentang Saya
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
             {[
               {
                 icon: BookOpen,
@@ -279,12 +279,12 @@ export default function Portfolio() {
                   key={index}
                   data-animate
                   id={`about-card-${index}`}
-                  className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${item.color}-950/30 border border-${item.color}-500/20 rounded-2xl p-6 sm:p-8 hover:border-${item.color}-400/50 hover:shadow-xl hover:shadow-${item.color}-500/20 transition-all duration-500 backdrop-blur-sm transform hover:-translate-y-2 hover:scale-105 animate-slideUp group`}
+                  className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${item.color}-950/30 border border-${item.color}-500/20 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 hover:border-${item.color}-400/50 hover:shadow-xl hover:shadow-${item.color}-500/20 transition-all duration-500 backdrop-blur-sm transform hover:-translate-y-1 sm:hover:-translate-y-2 hover:scale-[1.02] sm:hover:scale-105 animate-slideUp group`}
                   style={{ animationDelay: item.delay }}
                 >
-                  <Icon className={`text-${item.color}-400 mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300`} size={32} />
-                  <h3 className={`text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-${item.color}-300 group-hover:text-${item.color}-200 transition-colors`}>{item.title}</h3>
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed group-hover:text-white transition-colors">
+                  <Icon className={`text-${item.color}-400 mb-3 sm:mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300`} size={24} />
+                  <h3 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-2 sm:mb-3 md:mb-4 text-${item.color}-300 group-hover:text-${item.color}-200 transition-colors`}>{item.title}</h3>
+                  <p className="text-slate-300 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed group-hover:text-white transition-colors">
                     {item.desc}
                   </p>
                 </div>
@@ -300,14 +300,14 @@ export default function Portfolio() {
         
         <div className="max-w-4xl mx-auto w-full relative z-10 px-4">
           <h2 
-            className="text-2xl sm:text-3xl md:text-5xl font-bold mb-8 sm:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp"
+            className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp"
             data-animate
             id="contact-title"
           >
             Hubungi Saya
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 lg:gap-8">
             {[
               {
                 icon: Phone,
@@ -343,13 +343,13 @@ export default function Portfolio() {
                   rel="noopener noreferrer"
                   data-animate
                   id={`contact-card-${index}`}
-                  className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${item.color}-950/30 border border-${item.color}-500/20 rounded-2xl p-6 hover:border-${item.color}-400 hover:shadow-2xl hover:shadow-${item.color}-500/30 transition-all duration-500 transform hover:-translate-y-3 hover:rotate-2 text-center group backdrop-blur-sm ${index === 2 ? 'sm:col-span-2 lg:col-span-1' : ''} animate-slideUp relative overflow-hidden`}
+                  className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${item.color}-950/30 border border-${item.color}-500/20 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 hover:border-${item.color}-400 hover:shadow-2xl hover:shadow-${item.color}-500/30 transition-all duration-500 transform hover:-translate-y-1 sm:hover:-translate-y-3 hover:rotate-1 sm:hover:rotate-2 text-center group backdrop-blur-sm animate-slideUp relative overflow-hidden`}
                   style={{ animationDelay: item.delay }}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br from-${item.color}-500/0 to-${item.color}-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                  <Icon className={`text-${item.color}-400 mx-auto mb-3 group-hover:scale-125 group-hover:text-${item.color}-300 transition-all duration-300 relative z-10 animate-bounce-slow`} size={32} />
-                  <h3 className={`text-lg sm:text-xl font-semibold mb-2 text-${item.color}-300 group-hover:text-${item.color}-200 transition-colors relative z-10`}>{item.title}</h3>
-                  <p className="text-slate-400 text-sm group-hover:text-slate-300 transition-colors relative z-10">{item.detail}</p>
+                  <Icon className={`text-${item.color}-400 mx-auto mb-2 sm:mb-3 group-hover:scale-125 group-hover:text-${item.color}-300 transition-all duration-300 relative z-10 animate-bounce-slow`} size={24} />
+                  <h3 className={`text-base sm:text-lg md:text-xl lg:text-2xl font-semibold mb-1 sm:mb-2 text-${item.color}-300 group-hover:text-${item.color}-200 transition-colors relative z-10`}>{item.title}</h3>
+                  <p className="text-slate-400 text-xs sm:text-sm md:text-base lg:text-lg group-hover:text-slate-300 transition-colors relative z-10">{item.detail}</p>
                 </a>
               );
             })}
