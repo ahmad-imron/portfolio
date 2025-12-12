@@ -187,6 +187,14 @@ export default function Portfolio() {
             <Settings size={24} />
           </button>
           
+          {/* Tombol Pengaturan di Pojok Kanan Atas (hanya untuk mobile) */}
+          <button
+            onClick={handleSettingsClick}
+            className="fixed top-4 right-4 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 backdrop-blur-sm border border-emerald-500/30 rounded-full p-2 shadow-lg shadow-emerald-500/20 hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 transform hover:scale-105 z-40 md:hidden"
+          >
+            <Settings size={20} />
+          </button>
+          
           {/* Custom Cursor Effect */}
           <div
             className="fixed w-6 h-6 border-2 border-emerald-400/50 rounded-full pointer-events-none z-30 transition-transform duration-100 ease-out hidden lg:block"
