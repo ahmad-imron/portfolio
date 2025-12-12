@@ -190,7 +190,7 @@ export default function Portfolio() {
           {/* Tombol Pengaturan di Pojok Kanan Atas (hanya untuk mobile) */}
           <button
             onClick={handleSettingsClick}
-            className="fixed top-4 right-4 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 backdrop-blur-sm border border-emerald-500/30 rounded-full p-2 shadow-lg shadow-emerald-500/20 hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 transform hover:scale-105 z-40 md:hidden"
+            className="fixed top-4 right-16 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 backdrop-blur-sm border border-emerald-500/30 rounded-full p-2 shadow-lg shadow-emerald-500/20 hover:shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 transform hover:scale-105 z-30 md:hidden"
           >
             <Settings size={20} />
           </button>
