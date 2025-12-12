@@ -5,18 +5,34 @@ export default function AdminPanel({ editableContent, updateContent, toggleEditi
   const [tempContent, setTempContent] = useState(editableContent);
 
   const handleSave = () => {
-    // Simpan perubahan ke state utama
-    Object.keys(tempContent).forEach(key => {
-      if (key === 'name' || key === 'lpdpInfo' || key === 'universityInfo' || key === 'jobInfo') {
-        updateContent('main', null, key, tempContent[key]);
-      } else if (key === 'aboutCards' || key === 'contactCards') {
-        tempContent[key].forEach((card, index) => {
-          Object.keys(card).forEach(field => {
-            updateContent(key, index, field, card[field]);
+    try {
+      console.log('Saving changes...');
+      console.log('Current tempContent:', tempContent);
+      
+      // Simpan perubahan ke state utama
+      Object.keys(tempContent).forEach(key => {
+        console.log(`Processing key: ${key}`);
+        if (key === 'name' || key === 'lpdpInfo' || key === 'universityInfo' || key === 'jobInfo') {
+          console.log(`Updating main field ${key} with value:`, tempContent[key]);
+          updateContent('main', null, key, tempContent[key]);
+        } else if (key === 'aboutCards' || key === 'contactCards') {
+          console.log(`Processing ${key}:`, tempContent[key]);
+          tempContent[key].forEach((card, index) => {
+            Object.keys(card).forEach(field => {
+              console.log(`Updating ${key}[${index}].${field} with value:`, card[field]);
+              updateContent(key, index, field, card[field]);
+            });
           });
-        });
-      }
-    });
+        }
+      });
+      
+      console.log('Changes saved successfully');
+      // Tambahkan notifikasi sukses jika diperlukan
+      alert('Perubahan berhasil disimpan!');
+    } catch (error) {
+      console.error('Error saving changes:', error);
+      alert('Gagal menyimpan perubahan: ' + error.message);
+    }
   };
 
   const handleChange = (section, index, field, value) => {

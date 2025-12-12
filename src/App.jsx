@@ -14,6 +14,7 @@ export default function Portfolio() {
   const [editingMode, setEditingMode] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [error, setError] = useState(null);
 
   // State untuk konten yang dapat diedit
   const [editableContent, setEditableContent] = useState({
@@ -56,9 +57,23 @@ export default function Portfolio() {
   });
 
   const handleLoginSuccess = () => {
-    setShowAdminLogin(false);
-    setShowAdminPanel(true);
-    setIsAdmin(true);
+    console.log('handleLoginSuccess called');
+    try {
+      console.log('Current state before changes:', { showAdminLogin, showAdminPanel, isAdmin });
+      console.log('Setting admin login state to false');
+      setShowAdminLogin(false);
+      console.log('Setting admin panel state to true');
+      setShowAdminPanel(true);
+      console.log('Setting isAdmin to true');
+      setIsAdmin(true);
+      console.log('Clearing any previous errors');
+      setError(null); // Clear any previous errors
+      console.log('Login success completed');
+      console.log('New state after changes:', { showAdminLogin, showAdminPanel, isAdmin });
+    } catch (error) {
+      console.error('Error during login success:', error);
+      setError('Gagal memuat panel admin. Silakan coba lagi.');
+    }
   };
 
   const handleLogout = () => {
@@ -68,6 +83,7 @@ export default function Portfolio() {
   };
 
   const handleCloseAdminPanel = () => {
+    console.log('handleCloseAdminPanel called');
     setShowAdminPanel(false);
   };
 
@@ -76,15 +92,42 @@ export default function Portfolio() {
   };
 
   const updateContent = (section, index, field, value) => {
-    setEditableContent(prev => {
-      const updated = { ...prev };
-      if (section === 'aboutCards' || section === 'contactCards') {
-        updated[section][index][field] = value;
-      } else if (section === 'main') {
-        updated[field] = value;
-      }
-      return updated;
-    });
+    try {
+      console.log(`updateContent called with: section=${section}, index=${index}, field=${field}, value=${value}`);
+      setEditableContent(prev => {
+        const updated = { ...prev };
+        console.log('Previous content:', prev);
+        
+        if (section === 'aboutCards' || section === 'contactCards') {
+          if (!updated[section]) {
+            console.error(`Section ${section} does not exist`);
+            return prev;
+          }
+          if (index >= updated[section].length) {
+            console.error(`Index ${index} out of bounds for section ${section}`);
+            return prev;
+          }
+          if (!updated[section][index]) {
+            console.error(`Item at index ${index} in section ${section} does not exist`);
+            return prev;
+          }
+          
+          updated[section][index][field] = value;
+          console.log(`Updated ${section}[${index}].${field} to:`, value);
+        } else if (section === 'main') {
+          updated[field] = value;
+          console.log(`Updated main field ${field} to:`, value);
+        } else {
+          console.error(`Unknown section: ${section}`);
+          return prev;
+        }
+        
+        console.log('Updated content:', updated);
+        return updated;
+      });
+    } catch (error) {
+      console.error('Error in updateContent:', error);
+    }
   };
 
   const handleSettingsClick = () => {
@@ -163,11 +206,26 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white overflow-hidden">
+      {/* Display error message if exists */}
+      {error && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-red-500/90 text-white px-4 py-2 rounded-lg shadow-lg">
+          {error}
+          <button 
+            onClick={() => setError(null)} 
+            className="ml-4 text-white hover:text-gray-200 font-bold"
+          >
+            ×
+          </button>
+        </div>
+      )}
+      
       {/* Admin Login atau Admin Panel */}
       {showAdminLogin ? (
-        <AdminLogin onLoginSuccess={handleLoginSuccess} />
+        <div>
+          <AdminLogin onLoginSuccess={handleLoginSuccess} />
+        </div>
       ) : showAdminPanel ? (
-        <>
+        <div>
           <AdminPanel 
             editableContent={editableContent}
             updateContent={updateContent}
@@ -176,7 +234,7 @@ export default function Portfolio() {
             editingMode={editingMode}
             onClose={handleCloseAdminPanel}
           />
-        </>
+        </div>
       ) : (
         <>
           {/* Tombol Pengaturan di Pojok Kanan Atas (hanya untuk desktop) */}
@@ -308,21 +366,21 @@ export default function Portfolio() {
               </div>
               
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-emerald-300 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp">
-                Ahmad Imron
+                {editableContent.name}
               </h1>
               
               <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm md:text-base lg:text-lg text-slate-300 mb-6 sm:mb-8 animate-slideUp" style={{ animationDelay: '0.2s' }}>
                 <div className="flex items-center justify-center gap-1 sm:gap-2 lg:gap-3 flex-wrap px-1 sm:px-2 md:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
                   <Award className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={14} />
-                  <span className="leading-tight">Penerima Beasiswa LPDP Angkatan 2 2024 PK-256</span>
+                  <span className="leading-tight">{editableContent.lpdpInfo}</span>
                 </div>
                 <div className="flex items-center justify-center gap-1 sm:gap-2 lg:gap-3 flex-wrap px-1 sm:px-2 md:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
                   <GraduationCap className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={14} style={{ animationDelay: '0.1s' }} />
-                  <span className="leading-tight">Mahasiswa Magister Linguistik di Universitas Airlangga Surabaya</span>
+                  <span className="leading-tight">{editableContent.universityInfo}</span>
                 </div>
                 <div className="flex items-center justify-center gap-1 sm:gap-2 lg:gap-3 flex-wrap px-1 sm:px-2 md:px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
                   <BookOpen className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={14} style={{ animationDelay: '0.2s' }} />
-                  <span className="leading-tight">Guru SMA Islam | STAI DUBA</span>
+                  <span className="leading-tight">{editableContent.jobInfo}</span>
                 </div>
               </div>
 
@@ -372,47 +430,21 @@ export default function Portfolio() {
               </h2>
               
               <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
-                {[
-                  {
-                    icon: BookOpen,
-                    title: 'Guru Bahasa Indonesia',
-                    desc: 'Saya adalah seorang guru Bahasa Indonesia yang berpengalaman di bidang kepenulisan, dengan dedikasi tinggi dalam mendidik generasi muda.',
-                    color: 'emerald',
-                    delay: '0s'
-                  },
-                  {
-                    icon: Award,
-                    title: 'Penerima Beasiswa LPDP',
-                    desc: 'Penerima beasiswa LPDP angkatan 2 2024 untuk melanjutkan pendidikan Magister Linguistik di Universitas Airlangga Surabaya.',
-                    color: 'teal',
-                    delay: '0.1s'
-                  },
-                  {
-                    icon: GraduationCap,
-                    title: 'Perjalanan Akademik',
-                    desc: 'Sedang menempuh pendidikan Magister Linguistik di Universitas Airlangga Surabaya dengan fokus pada linguistik terapan.',
-                    color: 'green',
-                    delay: '0.2s'
-                  },
-                  {
-                    icon: BookOpen,
-                    title: 'Pengalaman Mengajar',
-                    desc: 'Mengajar di SMA Islam STAI DUBA dengan pengalaman yang luas di bidang pendidikan Islam.',
-                    color: 'emerald',
-                    delay: '0.3s'
-                  }
-                ].map((item, index) => {
-                  const Icon = item.icon;
+                {editableContent.aboutCards.map((item, index) => {
+                  const Icon = [BookOpen, Award, GraduationCap, BookOpen][index];
+                  const colors = ['emerald', 'teal', 'green', 'emerald'];
+                  const delays = ['0s', '0.1s', '0.2s', '0.3s'];
+                  
                   return (
                     <div
                       key={index}
                       data-animate
                       id={`about-card-${index}`}
-                      className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${item.color}-950/30 border border-${item.color}-500/20 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 hover:border-${item.color}-400/50 hover:shadow-xl hover:shadow-${item.color}-500/20 transition-all duration-500 backdrop-blur-sm transform hover:-translate-y-1 sm:hover:-translate-y-2 hover:scale-[1.02] sm:hover:scale-105 animate-slideUp group`}
-                      style={{ animationDelay: item.delay }}
+                      className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${colors[index]}-950/30 border border-${colors[index]}-500/20 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 hover:border-${colors[index]}-400/50 hover:shadow-xl hover:shadow-${colors[index]}-500/20 transition-all duration-500 backdrop-blur-sm transform hover:-translate-y-1 sm:hover:-translate-y-2 hover:scale-[1.02] sm:hover:scale-105 animate-slideUp group`}
+                      style={{ animationDelay: delays[index] }}
                     >
-                      <Icon className={`text-${item.color}-400 mb-3 sm:mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300`} size={24} />
-                      <h3 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-2 sm:mb-3 md:mb-4 text-${item.color}-300 group-hover:text-${item.color}-200 transition-colors`}>{item.title}</h3>
+                      <Icon className={`text-${colors[index]}-400 mb-3 sm:mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300`} size={24} />
+                      <h3 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-2 sm:mb-3 md:mb-4 text-${colors[index]}-300 group-hover:text-${colors[index]}-200 transition-colors`}>{item.title}</h3>
                       <p className="text-slate-300 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed group-hover:text-white transition-colors">
                         {item.desc}
                       </p>
@@ -424,12 +456,12 @@ export default function Portfolio() {
           </section>
 
           {/* Contact Section */}
-          <section id="contact" className="min-h-screen flex items-center justify-center px-4 py-16 bg-gradient-to-b from-slate-900 via-emerald-950/20 to-slate-950 relative overflow-visible">
+          <section id="contact" className="min-h-screen md:min-h-screen flex items-center justify-center px-4 py-8 md:py-16 bg-gradient-to-b from-slate-900 via-emerald-950/20 to-slate-950 relative overflow-visible">
             <Particles />
             
             <div className="max-w-4xl mx-auto w-full relative z-10 px-4">
               <h2 
-                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp pt-8 sm:pt-10 md:pt-12 relative z-20 will-change-transform"
+                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp pt-8 sm:pt-10 md:pt-12 relative z-20 will-change-transform"
                 data-animate
                 id="contact-title"
               >
@@ -437,47 +469,30 @@ export default function Portfolio() {
               </h2>
               
               <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 lg:gap-8 relative z-10">
-                {[
-                  {
-                    icon: Phone,
-                    title: 'WhatsApp',
-                    detail: '087713111415',
-                    link: 'https://wa.me/6287713111415',
-                    color: 'emerald',
-                    delay: '0s'
-                  },
-                  {
-                    icon: Instagram,
-                    title: 'Instagram',
-                    detail: '@imron_ahmed',
-                    link: 'https://www.instagram.com/imron_ahmed',
-                    color: 'teal',
-                    delay: '0.1s'
-                  },
-                  {
-                    icon: Linkedin,
-                    title: 'LinkedIn',
-                    detail: 'Ahmad Imron',
-                    link: 'http://www.linkedin.com/in/ahmadimron',
-                    color: 'green',
-                    delay: '0.2s'
-                  }
-                ].map((item, index) => {
-                  const Icon = item.icon;
+                {editableContent.contactCards.map((item, index) => {
+                  const Icon = [Phone, Instagram, Linkedin][index];
+                  const colors = ['emerald', 'teal', 'green'];
+                  const delays = ['0s', '0.1s', '0.2s'];
+                  const links = [
+                    'https://wa.me/6287713111415',
+                    'https://www.instagram.com/imron_ahmed',
+                    'http://www.linkedin.com/in/ahmadimron'
+                  ];
+                  
                   return (
                     <a 
                       key={index}
-                      href={item.link}
+                      href={links[index]}
                       target="_blank"
                       rel="noopener noreferrer"
                       data-animate
                       id={`contact-card-${index}`}
-                      className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${item.color}-950/30 border border-${item.color}-500/20 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 hover:border-${item.color}-400 hover:shadow-2xl hover:shadow-${item.color}-500/30 transition-all duration-500 transform hover:-translate-y-1 sm:hover:-translate-y-3 hover:rotate-1 sm:hover:rotate-2 text-center group backdrop-blur-sm animate-slideUp relative overflow-hidden`}
-                      style={{ animationDelay: item.delay }}
+                      className={`bg-gradient-to-br from-slate-800/50 via-slate-900/50 to-${colors[index]}-950/30 border border-${colors[index]}-500/20 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 hover:border-${colors[index]}-400 hover:shadow-2xl hover:shadow-${colors[index]}-500/30 transition-all duration-500 transform hover:-translate-y-1 sm:hover:-translate-y-3 hover:rotate-1 sm:hover:rotate-2 text-center group backdrop-blur-sm animate-slideUp relative overflow-hidden`}
+                      style={{ animationDelay: delays[index] }}
                     >
-                      <div className={`absolute inset-0 bg-gradient-to-br from-${item.color}-500/0 to-${item.color}-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                      <Icon className={`text-${item.color}-400 mx-auto mb-2 sm:mb-3 group-hover:scale-125 group-hover:text-${item.color}-300 transition-all duration-300 relative z-10 animate-bounce-slow`} size={24} />
-                      <h3 className={`text-base sm:text-lg md:text-xl lg:text-2xl font-semibold mb-1 sm:mb-2 text-${item.color}-300 group-hover:text-${item.color}-200 transition-colors relative z-10`}>{item.title}</h3>
+                      <div className={`absolute inset-0 bg-gradient-to-br from-${colors[index]}-500/0 to-${colors[index]}-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                      <Icon className={`text-${colors[index]}-400 mx-auto mb-2 sm:mb-3 group-hover:scale-125 group-hover:text-${colors[index]}-300 transition-all duration-300 relative z-10 animate-bounce-slow`} size={24} />
+                      <h3 className={`text-base sm:text-lg md:text-xl lg:text-2xl font-semibold mb-1 sm:mb-2 text-${colors[index]}-300 group-hover:text-${colors[index]}-200 transition-colors relative z-10`}>{item.title}</h3>
                       <p className="text-slate-400 text-xs sm:text-sm md:text-base lg:text-lg group-hover:text-slate-300 transition-colors relative z-10">{item.detail}</p>
                     </a>
                   );

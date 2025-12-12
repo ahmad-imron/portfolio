@@ -1,35 +1,70 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeOff } from 'lucide-react';
+import { Lock, Eye, EyeOff, User } from 'lucide-react';
 
 export default function AdminLogin({ onLoginSuccess }) {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Password akan dicek melalui fungsi validasi yang lebih aman
-  const validatePassword = (inputPassword) => {
-    // Dalam implementasi produksi, ini seharusnya dilakukan di backend
-    // Untuk saat ini, kita akan menggunakan cara yang lebih aman dengan tidak menyimpan password langsung
-    const isValid = inputPassword === process.env.REACT_APP_ADMIN_PASSWORD || 
-                   inputPassword === 'admin123'; // Fallback untuk demo
-    
-    return isValid;
+  // Username dan password akan dicek melalui fungsi validasi yang lebih aman
+  const validateCredentials = (inputUsername, inputPassword) => {
+    try {
+      console.log('Starting credential validation');
+      console.log('Input username:', inputUsername);
+      console.log('Input password length:', inputPassword ? inputPassword.length : 0);
+      
+      // Hardcoded credentials for testing
+      const adminUsername = 'admin';
+      const adminPassword = 'admin123';
+      console.log('Expected username:', adminUsername);
+      console.log('Expected password:', adminPassword);
+      
+      const isValid = inputUsername === adminUsername && inputPassword === adminPassword;
+      console.log('Credential validation result:', isValid);
+      
+      return isValid;
+    } catch (error) {
+      console.error('Credential validation error:', error);
+      throw new Error('Gagal memvalidasi kredensial: ' + error.message);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Form submitted');
     setIsLoading(true);
     setError('');
 
-    // Simulasi pengecekan password
+    // Simulasi pengecekan kredensial
     setTimeout(() => {
-      if (validatePassword(password)) {
-        onLoginSuccess();
-      } else {
-        setError('Password salah. Silakan coba lagi.');
+      try {
+        console.log('Validating credentials...');
+        const isValid = validateCredentials(username, password);
+        console.log('Credentials valid:', isValid);
+        
+        if (isValid) {
+          console.log('Login successful, calling onLoginSuccess');
+          // Tambahkan pengecekan apakah onLoginSuccess adalah fungsi
+          if (typeof onLoginSuccess === 'function') {
+            console.log('onLoginSuccess is a function, calling it');
+            onLoginSuccess();
+          } else {
+            console.error('onLoginSuccess is not a function:', typeof onLoginSuccess);
+            setError('Terjadi kesalahan konfigurasi. Silakan hubungi administrator.');
+          }
+        } else {
+          console.log('Login failed, setting error');
+          setError('Username atau password salah. Silakan coba lagi.');
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+        setError('Terjadi kesalahan saat memvalidasi kredensial: ' + err.message);
+      } finally {
+        console.log('Setting isLoading to false');
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }, 500);
   };
 
@@ -42,10 +77,30 @@ export default function AdminLogin({ onLoginSuccess }) {
               <Lock className="text-emerald-400" size={32} />
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">Admin Login</h2>
-            <p className="text-slate-400">Masukkan password untuk mengakses panel admin</p>
+            <p className="text-slate-400">Masukkan username dan password untuk mengakses panel admin</p>
           </div>
 
           <form onSubmit={handleSubmit}>
+            <div className="mb-6">
+              <label htmlFor="username" className="block text-sm font-medium text-slate-300 mb-2">
+                Username
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="text-slate-400" size={20} />
+                </div>
+                <input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                  placeholder="Masukkan username"
+                  required
+                />
+              </div>
+            </div>
+
             <div className="mb-6">
               <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
                 Password
