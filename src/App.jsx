@@ -168,7 +168,7 @@ export default function Portfolio() {
         
         <div className="relative z-10 text-center max-w-4xl mx-auto animate-fadeIn">
           <div className="mb-6 inline-block animate-scaleIn">
-            <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-teal-500 flex items-center justify-center text-5xl font-bold shadow-2xl shadow-emerald-500/50 ring-4 ring-emerald-500/20 animate-pulse-slow relative group">
+            <div className="w-48 h-48 mx-auto rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-teal-500 flex items-center justify-center text-5xl font-bold shadow-2xl shadow-emerald-500/50 ring-4 ring-emerald-500/20 animate-pulse-slow relative group">
               <img 
                 src={profilePhoto} 
                 alt="Ahmad Imron" 
