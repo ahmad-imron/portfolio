@@ -295,19 +295,19 @@ export default function Portfolio() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="min-h-screen flex items-center justify-center px-4 py-16 bg-gradient-to-b from-slate-900 via-emerald-950/20 to-slate-950 relative overflow-hidden">
+      <section id="contact" className="min-h-screen flex items-center justify-center px-4 py-16 bg-gradient-to-b from-slate-900 via-emerald-950/20 to-slate-950 relative overflow-visible">
         <Particles />
         
         <div className="max-w-4xl mx-auto w-full relative z-10 px-4">
           <h2 
-            className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp"
+            className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp pt-8 sm:pt-10 md:pt-12 relative z-20 will-change-transform"
             data-animate
             id="contact-title"
           >
             Hubungi Saya
           </h2>
           
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 lg:gap-8">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 lg:gap-8 relative z-10">
             {[
               {
                 icon: Phone,
@@ -377,7 +377,7 @@ export default function Portfolio() {
             transform: translateY(0);
           }
         }
-
+        
         @keyframes slideUp {
           from {
             opacity: 0;
@@ -388,7 +388,7 @@ export default function Portfolio() {
             transform: translateY(0);
           }
         }
-
+        
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -397,7 +397,7 @@ export default function Portfolio() {
             opacity: 1;
           }
         }
-
+        
         @keyframes scaleIn {
           from {
             opacity: 0;
@@ -408,7 +408,7 @@ export default function Portfolio() {
             transform: scale(1);
           }
         }
-
+        
         @keyframes float {
           0%, 100% {
             transform: translateY(0) translateX(0);
@@ -423,7 +423,7 @@ export default function Portfolio() {
             transform: translateY(-30px) translateX(5px);
           }
         }
-
+        
         @keyframes shimmer {
           0% {
             transform: translateX(-100%);
@@ -432,7 +432,7 @@ export default function Portfolio() {
             transform: translateX(100%);
           }
         }
-
+        
         @keyframes gradient {
           0%, 100% {
             background-position: 0% 50%;
@@ -441,49 +441,50 @@ export default function Portfolio() {
             background-position: 100% 50%;
           }
         }
-
+        
         .animate-slideDown {
           animation: slideDown 0.3s ease-out;
         }
-
+        
         .animate-slideUp {
           animation: slideUp 0.6s ease-out forwards;
           opacity: 0;
+          animation-fill-mode: both;
         }
-
+        
         .animate-fadeIn {
           animation: fadeIn 1s ease-out;
         }
-
+        
         .animate-scaleIn {
           animation: scaleIn 0.8s ease-out;
         }
-
+        
         .animate-float {
           animation: float 15s ease-in-out infinite;
         }
-
+        
         .animate-shimmer {
           animation: shimmer 3s infinite;
         }
-
+        
         .animate-gradient {
           background-size: 200% 200%;
           animation: gradient 3s ease infinite;
         }
-
+        
         .animate-pulse-slow {
           animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-
+        
         .animate-bounce-slow {
           animation: bounce 3s infinite;
         }
-
+        
         .animate-spin-slow {
           animation: spin 3s linear infinite;
         }
-
+        
         @keyframes pulse {
           0%, 100% {
             opacity: 1;
@@ -492,7 +493,7 @@ export default function Portfolio() {
             opacity: .8;
           }
         }
-
+        
         @keyframes bounce {
           0%, 100% {
             transform: translateY(0);
@@ -501,13 +502,27 @@ export default function Portfolio() {
             transform: translateY(-10px);
           }
         }
-
+        
         @keyframes spin {
           from {
             transform: rotate(0deg);
           }
           to {
             transform: rotate(360deg);
+          }
+        }
+        
+        /* Ensure proper rendering on mobile */
+        @media (max-width: 640px) {
+          .animate-slideUp {
+            animation-duration: 0.8s;
+            animation-timing-function: ease-out;
+          }
+          
+          #contact-title {
+            transform: translateZ(0);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
           }
         }
       `}</style>
