@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Phone, Instagram, Linkedin, BookOpen, Award, GraduationCap, Menu, X, Sparkles } from 'lucide-react';
+import profilePhoto from './assets/foto.jpeg';
+import cvFile from './assets/cv.ahmad.docx';
 
 export default function Portfolio() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -120,9 +122,9 @@ export default function Portfolio() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-slate-950/95 backdrop-blur-md border-t border-emerald-500/20 animate-slideDown">
             <div className="px-4 py-4 space-y-3">
-              <button onClick={() => scrollToSection('home')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Home</button>
-              <button onClick={() => scrollToSection('about')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">About</button>
-              <button onClick={() => scrollToSection('contact')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Contact</button>
+              <button onClick={() => scrollToSection('home')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Beranda</button>
+              <button onClick={() => scrollToSection('about')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Tentang</button>
+              <button onClick={() => scrollToSection('contact')} className="block w-full text-left text-slate-300 hover:text-emerald-400 transition-colors py-2 hover:translate-x-2 transition-transform duration-300">Kontak</button>
             </div>
           </div>
         )}
@@ -167,7 +169,11 @@ export default function Portfolio() {
         <div className="relative z-10 text-center max-w-4xl mx-auto animate-fadeIn">
           <div className="mb-6 inline-block animate-scaleIn">
             <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-teal-500 flex items-center justify-center text-5xl font-bold shadow-2xl shadow-emerald-500/50 ring-4 ring-emerald-500/20 animate-pulse-slow relative group">
-              <span className="relative z-10">AI</span>
+              <img 
+                src={profilePhoto} 
+                alt="Ahmad Imron" 
+                className="w-full h-full object-cover rounded-full"
+              />
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-teal-500 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
           </div>
@@ -179,29 +185,44 @@ export default function Portfolio() {
           <div className="space-y-3 text-sm sm:text-base md:text-lg text-slate-300 mb-8 animate-slideUp" style={{ animationDelay: '0.2s' }}>
             <div className="flex items-center justify-center gap-2 flex-wrap px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
               <Award className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={20} />
-              <span>Awardee LPDP batch 2 2024 PK-256</span>
+              <span>Penerima Beasiswa LPDP Angkatan 2 2024 PK-256</span>
             </div>
             <div className="flex items-center justify-center gap-2 flex-wrap px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
               <GraduationCap className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={20} style={{ animationDelay: '0.1s' }} />
-              <span>Master of Linguistics Student at Universitas Airlangga Surabaya</span>
+              <span>Mahasiswa Magister Linguistik di Universitas Airlangga Surabaya</span>
             </div>
             <div className="flex items-center justify-center gap-2 flex-wrap px-4 hover:text-emerald-300 transition-colors transform hover:scale-105 transition-transform duration-300">
               <BookOpen className="text-emerald-400 flex-shrink-0 animate-bounce-slow" size={20} style={{ animationDelay: '0.2s' }} />
-              <span>Islamic High School Teacher | STAI DUBA</span>
+              <span>Guru SMA Islam | STAI DUBA</span>
             </div>
           </div>
 
-          <button 
-            onClick={() => scrollToSection('contact')}
-            className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 hover:from-emerald-600 hover:via-green-600 hover:to-teal-600 text-slate-900 font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-110 shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/50 animate-slideUp relative overflow-hidden group"
-            style={{ animationDelay: '0.4s' }}
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              Get In Touch
-              <Sparkles size={18} className="animate-spin-slow" />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-teal-500 via-green-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slideUp" style={{ animationDelay: '0.4s' }}>
+            <button 
+              onClick={() => scrollToSection('contact')}
+              className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 hover:from-emerald-600 hover:via-green-600 hover:to-teal-600 text-slate-900 font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/50 relative overflow-hidden group w-full sm:w-auto"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Hubungi Saya
+                <Sparkles size={18} className="animate-spin-slow" />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 via-green-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+            
+            <a 
+              href={cvFile} 
+              download="CV_Ahmad_Imron.docx"
+              className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 hover:from-slate-600 hover:via-slate-700 hover:to-slate-800 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl shadow-slate-500/30 hover:shadow-2xl hover:shadow-slate-500/50 relative overflow-hidden group border border-slate-600 w-full sm:w-auto flex justify-center"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Download CV
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -218,7 +239,7 @@ export default function Portfolio() {
             data-animate
             id="about-title"
           >
-            About Me
+            Tentang Saya
           </h2>
           
           <div className="grid md:grid-cols-2 gap-8">
@@ -232,22 +253,22 @@ export default function Portfolio() {
               },
               {
                 icon: Award,
-                title: 'LPDP Awardee',
-                desc: 'Penerima beasiswa LPDP batch 2 2024 untuk melanjutkan pendidikan Master of Linguistics di Universitas Airlangga Surabaya.',
+                title: 'Penerima Beasiswa LPDP',
+                desc: 'Penerima beasiswa LPDP angkatan 2 2024 untuk melanjutkan pendidikan Magister Linguistik di Universitas Airlangga Surabaya.',
                 color: 'teal',
                 delay: '0.1s'
               },
               {
                 icon: GraduationCap,
-                title: 'Academic Journey',
-                desc: 'Sedang menempuh pendidikan Master of Linguistics di Universitas Airlangga Surabaya dengan fokus pada linguistik terapan.',
+                title: 'Perjalanan Akademik',
+                desc: 'Sedang menempuh pendidikan Magister Linguistik di Universitas Airlangga Surabaya dengan fokus pada linguistik terapan.',
                 color: 'green',
                 delay: '0.2s'
               },
               {
                 icon: BookOpen,
                 title: 'Pengalaman Mengajar',
-                desc: 'Mengajar di Islamic Religious High School STAI DUBA dengan pengalaman yang luas di bidang pendidikan Islam.',
+                desc: 'Mengajar di SMA Islam STAI DUBA dengan pengalaman yang luas di bidang pendidikan Islam.',
                 color: 'emerald',
                 delay: '0.3s'
               }
@@ -283,7 +304,7 @@ export default function Portfolio() {
             data-animate
             id="contact-title"
           >
-            Let's Connect
+            Hubungi Saya
           </h2>
           
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -340,8 +361,8 @@ export default function Portfolio() {
       <footer className="bg-slate-950 border-t border-emerald-500/20 py-8 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-teal-500/5 animate-shimmer"></div>
         <div className="max-w-6xl mx-auto text-center text-slate-400 relative z-10">
-          <p className="text-sm hover:text-emerald-400 transition-colors">© 2024 Ahmad Imron. All rights reserved.</p>
-          <p className="text-xs mt-2 text-emerald-400/80 hover:text-emerald-400 transition-colors">Built with React & Tailwind CSS ✨</p>
+          <p className="text-sm hover:text-emerald-400 transition-colors">© 2024 Ahmad Imron. Hak cipta dilindungi undang-undang.</p>
+          <p className="text-xs mt-2 text-emerald-400/80 hover:text-emerald-400 transition-colors">Dibangun dengan React & Tailwind CSS ✨</p>
         </div>
       </footer>
 
