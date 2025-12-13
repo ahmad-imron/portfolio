@@ -138,19 +138,6 @@ export default function Portfolio() {
     }
   };
 
-  // Debounce function untuk optimasi scroll event
-  const debounce = (func, wait) => {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  };
-
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     const handleMouseMove = (e) => {
@@ -160,80 +147,90 @@ export default function Portfolio() {
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Intersection Observer untuk scroll animations dengan threshold yang lebih baik
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
-          }
-        });
-      },
-      { 
-        threshold: 0.1,
-        rootMargin: '50px' // Memperbesar margin untuk lebih awal memicu animasi
-      }
-    );
+    // Intersection Observer untuk scroll animations dengan peningkatan
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px' // Memperbesar area deteksi
+    };
 
-    const animatedElements = document.querySelectorAll('[data-animate]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          
+          // Menandai elemen sebagai terliubah untuk mencegah animasi ulang
+          entry.target.setAttribute('data-animated', 'true');
+        }
+      });
+    }, observerOptions);
+
+    // Mengamati semua elemen dengan atribut data-animate
+    const animatedElements = document.querySelectorAll('[data-animate]:not([data-animated="true"])');
     animatedElements.forEach((el) => observer.observe(el));
 
-    // Fallback 1: Periksa visibilitas elemen saat halaman dimuat
-    const checkInitialVisibility = () => {
-      animatedElements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        const isVisibleInViewport = (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        ) || (
-          rect.top < window.innerHeight && rect.bottom >= 0
-        );
-        
-        if (isVisibleInViewport && !isVisible[el.id]) {
-          setIsVisible((prev) => ({ ...prev, [el.id]: true }));
+    // Scroll listener untuk mendeteksi posisi elemen secara manual
+    const handleScrollCheck = () => {
+      animatedElements.forEach((element) => {
+        if (!element.hasAttribute('data-animated')) {
+          const rect = element.getBoundingClientRect();
+          const isVisibleInViewport = (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+          ) || (
+            rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.bottom >= 0
+          );
+          
+          if (isVisibleInViewport) {
+            setIsVisible((prev) => ({ ...prev, [element.id]: true }));
+            element.setAttribute('data-animated', 'true');
+          }
         }
       });
     };
 
-    // Jalankan pengecekan awal setelah render
-    setTimeout(checkInitialVisibility, 100);
+    // Throttle scroll handler untuk performa
+    let ticking = false;
+    const scrollHandler = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScrollCheck();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    // Fallback 2: Scroll listener untuk memicu animasi secara manual dengan debounce
-    const debouncedScrollHandler = debounce(() => {
-      checkInitialVisibility();
-    }, 100);
+    window.addEventListener('scroll', scrollHandler);
+    window.addEventListener('resize', scrollHandler);
 
-    window.addEventListener('scroll', debouncedScrollHandler, { passive: true });
-
-    // Fallback 3: Resize listener untuk menangani perubahan ukuran layar
-    const handleResize = debounce(() => {
-      checkInitialVisibility();
-    }, 250);
-
-    window.addEventListener('resize', handleResize);
-
-    // Fallback 4: Timeout untuk memastikan semua elemen muncul
+    // Memastikan semua elemen terlihat setelah beberapa detik
     const finalFallbackTimer = setTimeout(() => {
-      animatedElements.forEach((el) => {
-        if (!isVisible[el.id]) {
-          setIsVisible((prev) => ({ ...prev, [el.id]: true }));
-          // Tambahkan class untuk memastikan animasi dijalankan
-          el.classList.add('visible');
+      animatedElements.forEach((element) => {
+        if (!element.hasAttribute('data-animated')) {
+          setIsVisible((prev) => ({ ...prev, [element.id]: true }));
+          element.setAttribute('data-animated', 'true');
         }
       });
-    }, 5000);
+    }, 2000);
+
+    // Memeriksa visibilitas elemen segera setelah mount
+    const immediateCheckTimer = setTimeout(() => {
+      handleScrollCheck();
+    }, 100);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', debouncedScrollHandler);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', scrollHandler);
+      window.removeEventListener('resize', scrollHandler);
       observer.disconnect();
       clearTimeout(finalFallbackTimer);
+      clearTimeout(immediateCheckTimer);
     };
-  }, [isVisible]);
+  }, []);
 
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -605,28 +602,6 @@ export default function Portfolio() {
               }
             }
             
-            /* Tambahkan definisi animasi default untuk elemen yang tidak teramati */
-            [data-animate] {
-              opacity: 0;
-              transform: translateY(30px);
-            }
-            
-            /* Override untuk elemen yang terlihat */
-            [data-animate].visible,
-            .animate-slideUp {
-              animation: slideUp 0.6s ease-out forwards;
-              opacity: 1;
-              transform: translateY(0);
-            }
-            
-            /* Untuk browser yang tidak mendukung Intersection Observer */
-            @media (prefers-reduced-motion: reduce) {
-              [data-animate] {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            
             @keyframes fadeIn {
               from {
                 opacity: 0;
@@ -755,6 +730,8 @@ export default function Portfolio() {
               .animate-slideUp {
                 animation-duration: 0.8s;
                 animation-timing-function: ease-out;
+                /* Memastikan animasi selalu dimainkan */
+                animation-fill-mode: both !important;
               }
               
               #contact-title {
@@ -773,6 +750,13 @@ export default function Portfolio() {
               #contact-title:not(.text-gradient-loaded) {
                 color: #10b981;
               }
+              
+              /* Memastikan semua kartu kontak terlihat */
+              [id^="contact-card-"],
+              [id^="about-card-"] {
+                transform: translateZ(0);
+                -webkit-transform: translateZ(0);
+              }
             }
             
             /* Fallback untuk browser yang tidak mendukung background-clip: text */
@@ -781,6 +765,11 @@ export default function Portfolio() {
                 color: #10b981;
                 background: none;
               }
+            }
+            
+            /* Memastikan animasi selalu dimainkan */
+            .animate-slideUp {
+              animation-fill-mode: both !important;
             }
           `}</style>
         </>
