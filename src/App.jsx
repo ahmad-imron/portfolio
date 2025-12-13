@@ -161,10 +161,21 @@ export default function Portfolio() {
 
     document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
 
+    // Fallback: tampilkan semua elemen setelah 3 detik jika belum terlihat
+    const fallbackTimer = setTimeout(() => {
+      const animatedElements = document.querySelectorAll('[data-animate]');
+      animatedElements.forEach((el) => {
+        if (!isVisible[el.id]) {
+          setIsVisible((prev) => ({ ...prev, [el.id]: true }));
+        }
+      });
+    }, 3000);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       observer.disconnect();
+      clearTimeout(fallbackTimer);
     };
   }, []);
 
@@ -461,9 +472,14 @@ export default function Portfolio() {
             
             <div className="max-w-4xl mx-auto w-full relative z-10 px-4">
               <h2 
-                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp pt-8 sm:pt-10 md:pt-12 relative z-20 will-change-transform"
+                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 sm:mb-8 md:mb-12 text-center bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent animate-slideUp pt-8 sm:pt-10 md:pt-12 relative"
                 data-animate
                 id="contact-title"
+                style={{ 
+                  animationFillMode: 'both',
+                  opacity: 1,
+                  animationDelay: '0.1s'
+                }}
               >
                 Hubungi Saya
               </h2>
@@ -667,6 +683,25 @@ export default function Portfolio() {
                 transform: translateZ(0);
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
+                /* Menambahkan fallback color untuk memastikan teks terlihat */
+                color: #10b981; /* emerald-500 */
+                background: none;
+                -webkit-background-clip: unset;
+                background-clip: unset;
+                text-shadow: 0 0 1px rgba(16, 185, 129, 0.1);
+              }
+              
+              /* Fallback untuk gradient text jika tidak didukung */
+              #contact-title:not(.text-gradient-loaded) {
+                color: #10b981;
+              }
+            }
+            
+            /* Fallback untuk browser yang tidak mendukung background-clip: text */
+            @supports not (background-clip: text) {
+              #contact-title {
+                color: #10b981;
+                background: none;
               }
             }
           `}</style>
