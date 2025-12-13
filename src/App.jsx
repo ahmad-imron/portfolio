@@ -138,6 +138,19 @@ export default function Portfolio() {
     }
   };
 
+  // Debounce function untuk optimasi scroll event
+  const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     const handleMouseMove = (e) => {
@@ -147,7 +160,7 @@ export default function Portfolio() {
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Intersection Observer untuk scroll animations
+    // Intersection Observer untuk scroll animations dengan threshold yang lebih baik
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -156,34 +169,71 @@ export default function Portfolio() {
           }
         });
       },
-      { threshold: 0.1 }
+      { 
+        threshold: 0.1,
+        rootMargin: '50px' // Memperbesar margin untuk lebih awal memicu animasi
+      }
     );
 
-    document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
+    const animatedElements = document.querySelectorAll('[data-animate]');
+    animatedElements.forEach((el) => observer.observe(el));
 
-    // Fallback langsung: tampilkan semua elemen setelah 3 detik jika belum terlihat
-    const fallbackTimer = setTimeout(() => {
-      const animatedElements = document.querySelectorAll('[data-animate]');
+    // Fallback 1: Periksa visibilitas elemen saat halaman dimuat
+    const checkInitialVisibility = () => {
       animatedElements.forEach((el) => {
-        if (!isVisible[el.id]) {
+        const rect = el.getBoundingClientRect();
+        const isVisibleInViewport = (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        ) || (
+          rect.top < window.innerHeight && rect.bottom >= 0
+        );
+        
+        if (isVisibleInViewport && !isVisible[el.id]) {
           setIsVisible((prev) => ({ ...prev, [el.id]: true }));
         }
       });
-    }, 3000);
+    };
 
-    // Fallback tambahan: tampilkan elemen kontak secara eksplisit
-    const contactFallbackTimer = setTimeout(() => {
-      setIsVisible((prev) => ({ ...prev, 'contact-title': true }));
-    }, 1000);
+    // Jalankan pengecekan awal setelah render
+    setTimeout(checkInitialVisibility, 100);
+
+    // Fallback 2: Scroll listener untuk memicu animasi secara manual dengan debounce
+    const debouncedScrollHandler = debounce(() => {
+      checkInitialVisibility();
+    }, 100);
+
+    window.addEventListener('scroll', debouncedScrollHandler, { passive: true });
+
+    // Fallback 3: Resize listener untuk menangani perubahan ukuran layar
+    const handleResize = debounce(() => {
+      checkInitialVisibility();
+    }, 250);
+
+    window.addEventListener('resize', handleResize);
+
+    // Fallback 4: Timeout untuk memastikan semua elemen muncul
+    const finalFallbackTimer = setTimeout(() => {
+      animatedElements.forEach((el) => {
+        if (!isVisible[el.id]) {
+          setIsVisible((prev) => ({ ...prev, [el.id]: true }));
+          // Tambahkan class untuk memastikan animasi dijalankan
+          el.classList.add('visible');
+        }
+      });
+    }, 5000);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', debouncedScrollHandler);
+      window.removeEventListener('resize', handleResize);
       observer.disconnect();
-      clearTimeout(fallbackTimer);
-      clearTimeout(contactFallbackTimer);
+      clearTimeout(finalFallbackTimer);
     };
-  }, []);
+  }, [isVisible]);
 
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -550,6 +600,28 @@ export default function Portfolio() {
                 transform: translateY(30px);
               }
               to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            
+            /* Tambahkan definisi animasi default untuk elemen yang tidak teramati */
+            [data-animate] {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            
+            /* Override untuk elemen yang terlihat */
+            [data-animate].visible,
+            .animate-slideUp {
+              animation: slideUp 0.6s ease-out forwards;
+              opacity: 1;
+              transform: translateY(0);
+            }
+            
+            /* Untuk browser yang tidak mendukung Intersection Observer */
+            @media (prefers-reduced-motion: reduce) {
+              [data-animate] {
                 opacity: 1;
                 transform: translateY(0);
               }
