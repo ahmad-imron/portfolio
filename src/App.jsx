@@ -56,6 +56,15 @@ export default function Portfolio() {
     ]
   });
 
+  // State untuk melacak apakah pengguna menggunakan perangkat mobile
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Deteksi perangkat mobile
+    const mobileCheck = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    setIsMobile(mobileCheck);
+  }, []);
+
   const handleLoginSuccess = () => {
     console.log('handleLoginSuccess called');
     try {
@@ -149,7 +158,7 @@ export default function Portfolio() {
 
     // Intersection Observer untuk scroll animations dengan peningkatan
     const observerOptions = {
-      threshold: 0.1,
+      threshold: isMobile ? 0.05 : 0.1, // Threshold lebih rendah untuk mobile
       rootMargin: '0px 0px -50px 0px' // Memperbesar area deteksi
     };
 
@@ -174,9 +183,9 @@ export default function Portfolio() {
         if (!element.hasAttribute('data-animated')) {
           const rect = element.getBoundingClientRect();
           const isVisibleInViewport = (
-            rect.top >= 0 &&
+            rect.top >= -100 && // Lebih toleran terhadap posisi
             rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 100 && // Lebih toleran terhadap posisi
             rect.right <= (window.innerWidth || document.documentElement.clientWidth)
           ) || (
             rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
@@ -214,7 +223,7 @@ export default function Portfolio() {
           element.setAttribute('data-animated', 'true');
         }
       });
-    }, 2000);
+    }, isMobile ? 1500 : 2000); // Waktu yang lebih cepat untuk mobile
 
     // Memeriksa visibilitas elemen segera setelah mount
     const immediateCheckTimer = setTimeout(() => {
@@ -230,7 +239,7 @@ export default function Portfolio() {
       clearTimeout(finalFallbackTimer);
       clearTimeout(immediateCheckTimer);
     };
-  }, []);
+  }, [isMobile]); // Tambahkan isMobile sebagai dependency
 
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
