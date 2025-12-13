@@ -161,7 +161,7 @@ export default function Portfolio() {
 
     document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
 
-    // Fallback: tampilkan semua elemen setelah 3 detik jika belum terlihat
+    // Fallback langsung: tampilkan semua elemen setelah 3 detik jika belum terlihat
     const fallbackTimer = setTimeout(() => {
       const animatedElements = document.querySelectorAll('[data-animate]');
       animatedElements.forEach((el) => {
@@ -171,11 +171,17 @@ export default function Portfolio() {
       });
     }, 3000);
 
+    // Fallback tambahan: tampilkan elemen kontak secara eksplisit
+    const contactFallbackTimer = setTimeout(() => {
+      setIsVisible((prev) => ({ ...prev, 'contact-title': true }));
+    }, 1000);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       observer.disconnect();
       clearTimeout(fallbackTimer);
+      clearTimeout(contactFallbackTimer);
     };
   }, []);
 
